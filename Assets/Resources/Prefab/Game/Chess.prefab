@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 238276086811179110}
   - component: {fileID: 9089914059046325045}
   - component: {fileID: 6288786343660739034}
+  - component: {fileID: 728539118451010703}
   m_Layer: 5
-  m_Name: chess
+  m_Name: Chess
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,3 +77,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &728539118451010703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4806047838928849446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a59c153f8ed8448a8b8815a61a01ff63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 4312280210571824423, guid: 43b7dfd6e20af944daf2a2659c085aac, type: 3}

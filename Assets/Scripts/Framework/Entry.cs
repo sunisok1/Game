@@ -8,5 +8,9 @@ namespace Framework
         private void Start()
         {
         }
+
+        private void OnDestroy()
+        {
+        }
     }
 }
