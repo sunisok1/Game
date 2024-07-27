@@ -1,7 +1,6 @@
-﻿using System;
-using Framework;
+﻿using Framework;
 
-namespace Game
+namespace Game.Core
 {
     public class GameEntry : Entry
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Framework.Singletons;
-using Game.Units;
+using Game.Core.Units;
 using UnityEngine;
 
 namespace Game.Mono

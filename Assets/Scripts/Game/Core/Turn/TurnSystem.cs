@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Game.Units;
+using Game.Core.Units;
 
-namespace Game.Turn
+namespace Game.Core.Turn
 {
     public class TurnManager
     {

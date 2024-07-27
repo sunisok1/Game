@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Game.Units
+namespace Game.Core.Units
 {
     public static class PlayerManager
     {

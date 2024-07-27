@@ -1,4 +1,4 @@
-﻿namespace Game.Units
+﻿namespace Game.Core.Units
 {
     public interface ITurnStrategy
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Units
+namespace Game.Core.Units
 {
     public class Player
     {
