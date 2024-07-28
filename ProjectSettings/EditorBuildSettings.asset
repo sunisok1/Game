@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Entry.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/_Scenes/Chess.unity
+    guid: b1c8f527b62db8a4083356228e34ed90
   m_configObjects: {}

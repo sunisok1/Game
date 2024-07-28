@@ -1,16 +1,18 @@
-﻿using System;
-using Framework.Singletons;
+﻿using Framework.Singletons;
 using Game.Core.Units;
 using UnityEngine;
 
-namespace Game.Mono
+namespace Game.Core.Mono
 {
     public class ChessMono : MonoSingleton<ChessMono>
     {
-        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private PlayerMono playerPrefab;
+        private const float gridH = 144;
+        private const float gridW = 144;
 
-        private void Start()
+        protected override void Awake()
         {
+            base.Awake();
             PlayerManager.OnPlayerCreate += OnPlayerCreate;
         }
 
@@ -21,7 +23,10 @@ namespace Game.Mono
 
         private void OnPlayerCreate(Player obj)
         {
-            Instantiate(playerPrefab, obj.Position, Quaternion.identity, transform);
+            Vector2 pos = obj.Position;
+            var player = Instantiate(playerPrefab, transform);
+            var playerTransform = player.transform as RectTransform;
+            playerTransform.SetLocalPositionAndRotation(new(pos.x * gridW, pos.y * gridH), Quaternion.identity);
         }
     }
 }

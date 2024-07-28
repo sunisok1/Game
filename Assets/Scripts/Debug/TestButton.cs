@@ -7,7 +7,8 @@ namespace Debug
     {
         protected override void OnClick()
         {
-            PlayerManager.CreatePlayer(new(1, 1));
+            Player player = new(new(1, 2));
+            PlayerManager.InitPlayer(player);
         }
     }
 }

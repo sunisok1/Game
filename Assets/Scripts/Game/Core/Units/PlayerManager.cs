@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Game.Core.Units
 {
@@ -7,11 +7,17 @@ namespace Game.Core.Units
     {
         public static event Action<Player> OnPlayerCreate;
 
-        public static Player CreatePlayer(Vector2 position)
+        public static void InitPlayer(Player player)
         {
-            var player = new Player(position);
             OnPlayerCreate?.Invoke(player);
-            return player;
+        }
+
+        public static void InitPlayers(IEnumerable<Player> playerList)
+        {
+            foreach (var player in playerList)
+            {
+                InitPlayer(player);
+            }
         }
     }
 }
