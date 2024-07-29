@@ -11,7 +11,7 @@ namespace Game.Skills
 
         public override async Task ExecuteAsync(IPlayer player)
         {
-            Vector2 pos = await Chess.Instance.SelectPosition(player.Position, 2);
+            Vector2Int pos = await Chess.Instance.SelectPosition(player.Position, 2);
             player.MoveTo(pos);
         }
     }

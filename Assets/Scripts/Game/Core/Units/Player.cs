@@ -8,12 +8,12 @@ namespace Game.Core.Units
 {
     public class Player : IPlayer
     {
-        public Player(Vector2 position)
+        public Player(Vector2Int position)
         {
             Position = position;
         }
 
-        public Vector2 Position { get; private set; }
+        public Vector2Int Position { get; private set; }
 
         // public string[] skills;
         // public string[] invisibleSkills;
@@ -32,7 +32,7 @@ namespace Game.Core.Units
         //本回合当前阶段指针
         private int phasePointer;
 
-        public void MoveTo(Vector2 pos)
+        public void MoveTo(Vector2Int pos)
         {
             Position = pos;
         }

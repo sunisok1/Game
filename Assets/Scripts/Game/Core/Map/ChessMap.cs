@@ -12,23 +12,45 @@ namespace Game.Core.Map
         Selectable
     }
 
-    public class Chess : Singleton<Chess>
+    public class GridStateChangeArgs : EventArgs
     {
-        public event Action<Vector2, GridState> OnGridStateChange;
+    }
 
-        public async Task<Vector2> SelectPosition(Vector2 origin, int range)
+    public partial class Chess : Singleton<Chess>
+    {
+        public int width { get; private set; }
+        public int height { get; private set; }
+        private Grid[,] grids;
+
+        public void Init(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    grids[i, j] = new(new(i, j));
+                }
+            }
+        }
+
+        public event Action<Vector2Int, GridState> OnGridStateChange;
+
+        public async Task<Vector2Int> SelectPosition(Vector2Int origin, int range)
         {
             for (int i = -range; i <= range; i++)
             {
                 for (int j = -range; j <= range; j++)
                 {
-                    if (Utils.MathUtil.ManhattanDistance(origin, origin + new Vector2(i, j)) > range)
+                    if (Utils.MathUtil.ManhattanDistance(origin, grids[i, j].Position) <= range)
                     {
+                        grids[i, j].SetGridState(GridState.Pointer);
                     }
                 }
             }
 
-            OnGridStateChange
+            return Vector2Int.zero;
         }
     }
 }
