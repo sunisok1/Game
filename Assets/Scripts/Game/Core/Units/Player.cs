@@ -24,6 +24,7 @@ namespace Game.Core.Units
         // public string[] awakenedSkills;
         // public Dictionary<string, string[]> forbiddenSkills;
         private readonly Dictionary<Type, AbstractSkill> skills = new();
+        public IEnumerable<AbstractSkill> Skills => skills.Values;
 
         //本回合所有阶段列表
         private List<PhaseEnum> phaseQueue;
