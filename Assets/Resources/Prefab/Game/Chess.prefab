@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9089914059046325045}
   - component: {fileID: 6288786343660739034}
   - component: {fileID: 728539118451010703}
+  - component: {fileID: 2140596963375786862}
   m_Layer: 5
   m_Name: Chess
   m_TagString: Untagged
@@ -89,3 +90,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8811609755590220039, guid: 43b7dfd6e20af944daf2a2659c085aac, type: 3}
+--- !u!223 &2140596963375786862
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4806047838928849446}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0

@@ -1,4 +1,7 @@
 ﻿using Framework.Singletons;
+using Game.Core;
+using Game.Core.Map;
+using Game.Core.Turn;
 using Game.Core.Units;
 using UnityEngine;
 
@@ -19,6 +22,8 @@ namespace Game.Mono
         private void OnDestroy()
         {
             PlayerManager.OnPlayerCreate -= OnPlayerCreate;
+            TurnSystem.Instance.Dispose();
+            Chess.Instance.Dispose();
         }
 
         private void OnPlayerCreate(Player obj)

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Game.Abstract;
 using UnityEngine;
 
 namespace Game.Core.Units
 {
-    public class Player
+    public class Player : IPlayer
     {
         public Player(Vector2 position)
         {
@@ -14,28 +15,47 @@ namespace Game.Core.Units
 
         public Vector2 Position { get; private set; }
 
-        Dictionary<string, object> node;
+        // public string[] skills;
+        // public string[] invisibleSkills;
+        // public string[] initedSkills;
+        // public Dictionary<string, string[]> additionalSkills;
+        // public Dictionary<string, string[]> disabledSkills;
+        // public string[] hiddenSkills;
+        // public string[] awakenedSkills;
+        // public Dictionary<string, string[]> forbiddenSkills;
+        private readonly Dictionary<Type, AbstractSkill> skills = new();
+
+        //本回合所有阶段列表
         private List<PhaseEnum> phaseQueue;
+
+        //本回合当前阶段指针
         private int phasePointer;
-        public int phaseNumber;
+
+        public void MoveTo(Vector2 pos)
+        {
+            Position = pos;
+        }
+
+        public void AddSkill<T>() where T : AbstractSkill, new()
+        {
+            var skill = new T();
+            skills.Add(skill.GetType(), skill);
+        }
+
+        public bool RemoveSkill<T>() where T : AbstractSkill
+        {
+            return skills.Remove(typeof(T));
+        }
+
+        public bool HasSkill<T>() where T : AbstractSkill
+        {
+            return skills.ContainsKey(typeof(T));
+        }
+
+        Dictionary<string, object> node;
 
         public string[] skipList;
 
-        public string[] skills;
-
-        public string[] invisibleSkills;
-
-        public string[] initedSkills;
-
-        public Dictionary<string, string[]> additionalSkills;
-
-        public Dictionary<string, string[]> disabledSkills;
-
-        public string[] hiddenSkills;
-
-        public string[] awakenedSkills;
-
-        public Dictionary<string, string[]> forbiddenSkills;
 
         public Card[] judging;
 
@@ -83,17 +103,15 @@ namespace Game.Core.Units
 
         public int hp;
 
-        public int hujia;
-
         public int seatNum;
 
-        public Player nextSeat;
+        public Player NextSeat { get; set; }
 
-        public Player next;
+        public Player Next { get; set; }
 
-        public Player previousSeat;
+        public Player PreviousSeat { get; set; }
 
-        public Player previous;
+        public Player Previous { get; set; }
 
         public string name;
 
@@ -109,8 +127,6 @@ namespace Game.Core.Units
 
         public Action<Player> inits;
 
-        public Action<Player> _inits;
-
         public bool isZhu;
 
         public string identity;
@@ -121,6 +137,7 @@ namespace Game.Core.Units
 
         public async Task PhaseAsync()
         {
+            Debug.Log($"{name} PhaseAsync Start...");
             //初始化默认Phase队列
             phaseQueue = new()
             {
@@ -176,8 +193,19 @@ namespace Game.Core.Units
         {
         }
 
+        private TaskCompletionSource<bool> phaseUseTask;
+
         private async Task PhaseUseAsync()
         {
+            Debug.Log($"{name} is using skills. Waiting for player action...");
+            phaseUseTask = new TaskCompletionSource<bool>();
+            await phaseUseTask.Task;
+            Debug.Log($"{name} finished using skills.");
+        }
+
+        public void EndUse()
+        {
+            phaseUseTask.SetResult(true);
         }
 
         private async Task PhaseDiscardAsync()
