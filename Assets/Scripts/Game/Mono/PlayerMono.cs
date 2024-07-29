@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Core.Mono
+namespace Game.Mono
 {
     public class PlayerMono : MonoBehaviour
     {

@@ -2,7 +2,7 @@
 using Game.Core.Units;
 using UnityEngine;
 
-namespace Game.Core.Mono
+namespace Game.Mono
 {
     public class ChessMono : MonoSingleton<ChessMono>
     {
