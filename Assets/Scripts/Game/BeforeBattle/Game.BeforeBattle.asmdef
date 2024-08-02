@@ -1,0 +1,19 @@
+{
+    "name": "Game.BeforeBattle",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3a8bfa51065faca4f85d7c280f0a2528",
+        "GUID:e8c5e915e3a248ee8ab7f413a7861ef8",
+        "GUID:639888c7e17b2c240abcb48f37cf6201",
+        "GUID:1e9356c2b2bd4cfd8f31c999c7408eae"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

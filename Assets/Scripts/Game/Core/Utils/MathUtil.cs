@@ -9,5 +9,10 @@ namespace Game.Core.Utils
         {
             return Math.Abs(pos.x - other.x) + Math.Abs(pos.y - other.y);
         }
+
+        public static int Abs(this int i)
+        {
+            return i > 0 ? i : -i;
+        }
     }
 }

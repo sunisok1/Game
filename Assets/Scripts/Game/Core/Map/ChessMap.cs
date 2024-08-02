@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Framework.Singletons;
+using Game.Core.Utils;
 using UnityEngine;
 
 namespace Game.Core.Map
 {
-    public enum GridState
+    public enum GridStatus
     {
         None,
         Pointer,
-        Selectable
-    }
-
-    public class GridStateChangeArgs : EventArgs
-    {
+        Selectable,
+        Unselectable
     }
 
     public partial class Chess : Singleton<Chess>
     {
-        public int width { get; private set; }
-        public int height { get; private set; }
-        private Grid[,] grids;
+        public const int width = 5;
+        public const int height = 5;
+        private readonly Grid[,] grids = new Grid[width, height];
 
-        public void Init(int width, int height)
+        public Chess()
         {
-            this.width = width;
-            this.height = height;
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
@@ -35,22 +31,29 @@ namespace Game.Core.Map
             }
         }
 
-        public event Action<Vector2Int, GridState> OnGridStateChange;
-
         public async Task<Vector2Int> SelectPosition(Vector2Int origin, int range)
         {
-            for (int i = -range; i <= range; i++)
+            for (var i = -range; i <= range; i++)
             {
-                for (int j = -range; j <= range; j++)
+                for (var j = -range; j <= range; j++)
                 {
-                    if (Utils.MathUtil.ManhattanDistance(origin, grids[i, j].Position) <= range)
+                    var x = origin.x + i;
+                    var y = origin.y + j;
+                    if (!IsWithinGridBounds(x, y))
+                        continue;
+                    if (i.Abs() + j.Abs() <= range)
                     {
-                        grids[i, j].SetGridState(GridState.Pointer);
+                        grids[x, y].SetGridState(GridStatus.Pointer);
                     }
                 }
             }
 
             return Vector2Int.zero;
+        }
+
+        public bool IsWithinGridBounds(int x, int y)
+        {
+            return x >= 0 && x < grids.GetLength(0) && y >= 0 && y < grids.GetLength(1);
         }
     }
 }

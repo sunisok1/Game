@@ -18,10 +18,7 @@ namespace Game.Core.Turn
         public async void StartAsync(Status status)
         {
             var playerList = status.players;
-            await SceneManager.LoadSceneAsync("_Scenes/Chess");
-            Debug.Log("Scene Chess Entered");
             PlayerManager.InitPlayers(playerList);
-            Debug.Log("PlayerManager.InitPlayers(playerList);");
 
             try
             {
