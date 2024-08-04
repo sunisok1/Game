@@ -7,6 +7,7 @@ namespace Game.Abstract
     {
         Vector2Int Position { get; }
         IEnumerable<AbstractSkill> Skills { get; }
+        IController Controller { get; set; }
         void MoveTo(Vector2Int pos);
         void AddSkill<T>() where T : AbstractSkill, new();
         bool RemoveSkill<T>() where T : AbstractSkill;

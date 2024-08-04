@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Framework.Singletons;
 using Game.Core.Utils;
@@ -31,24 +32,26 @@ namespace Game.Core.Map
             }
         }
 
-        public async Task<Vector2Int> SelectPosition(Vector2Int origin, int range)
+        public List<Vector2Int> GetPositionList(Vector2Int origin, int range, Func<Vector2Int, bool> filter)
         {
-            for (var i = -range; i <= range; i++)
+            var list = new List<Vector2Int>();
+            Vector2Int pos = origin - new Vector2Int(range, range);
+            var maxX = Mathf.Max(grids.GetLength(0), origin.x + range);
+            var maxY = Mathf.Max(grids.GetLength(1), origin.y + range);
+            for (pos.x = Mathf.Max(0, pos.x); pos.x <= maxX; pos.x++)
+            for (pos.y = Mathf.Max(0, pos.y); pos.y <= maxY; pos.y++)
             {
-                for (var j = -range; j <= range; j++)
+                if (filter == null)
                 {
-                    var x = origin.x + i;
-                    var y = origin.y + j;
-                    if (!IsWithinGridBounds(x, y))
-                        continue;
-                    if (i.Abs() + j.Abs() <= range)
-                    {
-                        grids[x, y].SetGridState(GridStatus.Pointer);
-                    }
+                    list.Add(pos);
+                }
+                else if (filter(pos))
+                {
+                    list.Add(pos);
                 }
             }
 
-            return Vector2Int.zero;
+            return list;
         }
 
         public bool IsWithinGridBounds(int x, int y)

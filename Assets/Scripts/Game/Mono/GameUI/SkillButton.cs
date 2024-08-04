@@ -17,9 +17,9 @@ namespace Game.Mono.GameUI
             action();
         }
 
-        public void Init(IPlayer player, AbstractSkill skill)
+        public void Init(AbstractSkill skill)
         {
-            action = () => skill.ExecuteAsync(player);
+            action = () => skill.ExecuteAsync();
             textMeshProUGUI.text = skill.Name;
         }
     }

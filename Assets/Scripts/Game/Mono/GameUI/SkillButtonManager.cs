@@ -11,7 +11,7 @@ namespace Game.Mono.GameUI
             foreach (var skill in player.Skills)
             {
                 var button = Instantiate(skillButtonPrefab, transform);
-                button.Init(player, skill);
+                button.Init(skill);
             }
         }
     }
