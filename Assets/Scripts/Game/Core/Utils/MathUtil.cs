@@ -5,7 +5,7 @@ namespace Game.Core.Utils
 {
     public static class MathUtil
     {
-        public static int ManhattanDistance(this Vector2Int pos, Vector2Int other)
+        public static int ManhattanDistance(Vector2Int pos, Vector2Int other)
         {
             var d = pos - other;
             return d.x.Abs() + d.y.Abs();

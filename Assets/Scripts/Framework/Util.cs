@@ -11,5 +11,11 @@ namespace Framework
             rectTransform.SetLocalPositionAndRotation(localPos, quaternion);
             return t;
         }
+
+        public static void MoveRectLocal(Transform transform, Vector3 localPos, Quaternion quaternion, Transform parent)
+        {
+            var rectTransform = transform as RectTransform;
+            rectTransform.SetLocalPositionAndRotation(localPos, quaternion);
+        }
     }
 }

@@ -25,22 +25,23 @@ namespace Game.Mono
         private void Start()
         {
             (transform as RectTransform).sizeDelta = new(width * gridW, height * gridH);
-            for (int i = 0; i < width; i++)
+            for (int x = 0; x < width; x++)
             {
-                for (int j = 0; j < height; j++)
+                for (int y = 0; y < height; y++)
                 {
-                    grids[i, j] = Util.InstantiateRectLocal(gridPrefab, GetGridPos(i, j), Quaternion.identity, gridContent);
+                    grids[x, y] = Util.InstantiateRectLocal(gridPrefab, GetGridPos(x, y), Quaternion.identity, gridContent);
+                    grids[x, y].Init(new(x, y));
                 }
             }
 
             PlayerManager.OnPlayerCreate += OnPlayerCreate;
-            EventManager.Subscribe<GridStateChangeArgs>(OnGridStateChange);
+            Chess.Instance.OnGridStateChange += OnGridStateChange;
         }
 
         private void OnDestroy()
         {
             PlayerManager.OnPlayerCreate -= OnPlayerCreate;
-            EventManager.Unsubscribe<GridStateChangeArgs>(OnGridStateChange);
+            Chess.Instance.OnGridStateChange -= OnGridStateChange;
         }
 
         private static Vector3 GetGridPos(int i, int j)
@@ -48,16 +49,22 @@ namespace Game.Mono
             return new((i + 0.5f) * gridW, (j + 0.5f) * gridH);
         }
 
+        public void MoveObject(Vector2Int pos, Transform transform)
+        {
+            Util.MoveRectLocal(transform, GetGridPos(pos.x, pos.y), Quaternion.identity, playerContent);
+        }
 
-        private void OnGridStateChange(object sender, GridStateChangeArgs args)
+
+        private void OnGridStateChange(GridStateChangeArgs args)
         {
             grids[args.Position.x, args.Position.y].SetStatus(args.Status);
         }
 
 
-        private void OnPlayerCreate(Player obj)
+        private void OnPlayerCreate(Player player)
         {
-            Util.InstantiateRectLocal(playerPrefab, GetGridPos(obj.Position.x, obj.Position.y), Quaternion.identity, playerContent);
+            var playerMono = Util.InstantiateRectLocal(playerPrefab, GetGridPos(player.Position.x, player.Position.y), Quaternion.identity, playerContent);
+            playerMono.Init(player);
         }
     }
 }

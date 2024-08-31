@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
-using Framework;
-using Game.Abstract;
+using System.Threading.Tasks;
 using Game.Core.Map;
-using Game.Core.Utils;
-using UnityEngine;
+using Game.Core.Units;
 
 namespace Game.Skills
 {
@@ -11,15 +8,12 @@ namespace Game.Skills
     {
         public override string Name => "移动";
 
-        public override async Task ExecuteAsync()
+        protected override async Task ExecuteAsync(SkillArgs args)
         {
-            var posList = Chess.Instance.GetPositionList(owner.Position, 2, i => owner.Position.ManhattanDistance(i) <= 2);
-            var pos = await owner.Controller.SelectPosition();
+            var owner = args.owner;
+            var posList = Chess.Instance.GetMovablePositions(owner.Position, owner.MoveRange);
+            var pos = await args.owner.Controller.SelectPosition(posList);
             owner.MoveTo(pos);
-        }
-
-        public MoveSkill(IPlayer owner) : base(owner)
-        {
         }
     }
 }

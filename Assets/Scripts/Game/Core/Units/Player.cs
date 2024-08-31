@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Core.Units
 {
-    public class Player : IPlayer
+    public class Player
     {
         public Player(Vector2Int position)
         {
@@ -14,6 +14,10 @@ namespace Game.Core.Units
         }
 
         public Vector2Int Position { get; private set; }
+
+        public int MoveRange { get; private set; } = 2;
+
+        public bool IsEnemy { get; set; }
 
         // public string[] skills;
         // public string[] invisibleSkills;
@@ -23,8 +27,9 @@ namespace Game.Core.Units
         // public string[] hiddenSkills;
         // public string[] awakenedSkills;
         // public Dictionary<string, string[]> forbiddenSkills;
-        private readonly Dictionary<Type, AbstractSkill> skills = new();
-        public IEnumerable<AbstractSkill> Skills => skills.Values;
+        private readonly Dictionary<Type, ISkill> skills = new();
+        public IEnumerable<ISkill> Skills => skills.Values;
+        public IController Controller { get; set; }
 
         //本回合所有阶段列表
         private List<PhaseEnum> phaseQueue;
@@ -32,23 +37,26 @@ namespace Game.Core.Units
         //本回合当前阶段指针
         private int phasePointer;
 
+        public event Action<Vector2Int> OnMove;
+
         public void MoveTo(Vector2Int pos)
         {
             Position = pos;
+            OnMove?.Invoke(pos);
         }
 
-        public void AddSkill<T>() where T : AbstractSkill, new()
+        public void AddSkill<T>() where T : ISkill, new()
         {
             var skill = new T();
             skills.Add(skill.GetType(), skill);
         }
 
-        public bool RemoveSkill<T>() where T : AbstractSkill
+        public bool RemoveSkill<T>() where T : ISkill
         {
             return skills.Remove(typeof(T));
         }
 
-        public bool HasSkill<T>() where T : AbstractSkill
+        public bool HasSkill<T>() where T : ISkill
         {
             return skills.ContainsKey(typeof(T));
         }
@@ -84,7 +92,7 @@ namespace Game.Core.Units
         /**
          * @type { {
          * 	friend: [],
-         * 	enemy: [],
+         * 	: [],
          * 	neutral: [],
          * 	shown?: number,
          * 	handcards?: {
@@ -216,6 +224,7 @@ namespace Game.Core.Units
         private async Task PhaseJieshuAsync()
         {
         }
+
         //
         // chooseToUse(use)
         // {
@@ -608,5 +617,12 @@ namespace Game.Core.Units
         //
         //     return next;
         // }
+        public async void TriggerSkill(ISkill skill)
+        {
+            if (skills.ContainsKey(skill.GetType()))
+            {
+                await skill.ExecuteAsync(new SkillArgs(this));
+            }
+        }
     }
 }

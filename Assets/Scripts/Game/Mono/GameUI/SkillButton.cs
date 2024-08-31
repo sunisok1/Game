@@ -17,10 +17,14 @@ namespace Game.Mono.GameUI
             action();
         }
 
-        public void Init(AbstractSkill skill)
+        public void SetText(string text)
         {
-            action = () => skill.ExecuteAsync();
-            textMeshProUGUI.text = skill.Name;
+            textMeshProUGUI.text = text;
+        }
+
+        public void SetAction(Action action)
+        {
+            this.action = action;
         }
     }
 }
