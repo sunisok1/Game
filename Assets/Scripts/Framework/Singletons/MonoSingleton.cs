@@ -9,6 +9,10 @@ namespace Framework.Singletons
 
         protected virtual void Awake()
         {
+            if (Instance)
+            {
+                throw new System.Exception($"Instance of {typeof(T)} already exists.");
+            }
             Instance = this as T;
         }
     }

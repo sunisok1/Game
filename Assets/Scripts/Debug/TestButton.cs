@@ -7,7 +7,6 @@ namespace Debug
     {
         protected override void OnClick()
         {
-            Player player = new(new(1, 2));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Framework.Buttons;
+using Game.Charactor;
 using Game.Core;
 using Game.Core.Map;
 using Game.Core.Turn;
@@ -14,18 +15,9 @@ namespace Game.BeforeBattle
         {
             var players = new List<Player>()
             {
-                new(new(1, 2))
-                {
-                    name = "guanyu"
-                },
-                new(new(1, 4))
-                {
-                    name = "zhangfei"
-                },
-                new(new(2, 1))
-                {
-                    name = "liubei"
-                },
+                new(new(1, 4),new Liubei()),
+                new(new(1, 2),new Guanyu()),
+                new(new(2, 1),new Zhangfei()),
             };
             foreach (var player in players)
             {

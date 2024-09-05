@@ -6,18 +6,26 @@ using UnityEngine;
 
 namespace Game.Core.Units
 {
+
     public class Player
     {
-        public Player(Vector2Int position)
+        public Player(Vector2Int position, AbstractCharactor charactor)
         {
             Position = position;
+            Id = charactor.id;
+            name = charactor.name;
+            names = charactor.names;
         }
+
+        public int Id { get; }
 
         public Vector2Int Position { get; private set; }
 
         public int MoveRange { get; private set; } = 2;
 
         public bool IsEnemy { get; set; }
+
+        public Sex Sex { get; private set; }
 
         // public string[] skills;
         // public string[] invisibleSkills;
@@ -123,15 +131,7 @@ namespace Game.Core.Units
         public Player Previous { get; set; }
 
         public string name;
-
-        public string name1;
-
-        public string name2;
-
-        public object tempname;
-
-        public string sex;
-
+        public string[] names;
         public string group;
 
         public Action<Player> inits;

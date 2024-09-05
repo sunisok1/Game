@@ -5,7 +5,7 @@ using Game.Core.Units;
 
 namespace Game.Skills
 {
-    public abstract class AbstractSkill : ISkill
+    public abstract class SkillBase : ISkill
     {
         public abstract string Name { get; }
 

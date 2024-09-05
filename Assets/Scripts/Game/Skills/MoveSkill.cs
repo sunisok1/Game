@@ -4,7 +4,7 @@ using Game.Core.Units;
 
 namespace Game.Skills
 {
-    public class MoveSkill : AbstractSkill
+    public class MoveSkill : SkillBase
     {
         public override string Name => "移动";
 
