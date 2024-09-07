@@ -13,7 +13,7 @@ namespace Game.Mono
         [SerializeField] private Sprite defaultFemaleSkin;
         [SerializeField] private Sprite defaultDoubleSkin;
 
-        private const string skinPath = "Character";
+        private const string skinPath = "Image/Character";
 
         public Sprite GetClassicSkins(Player player)
         {
