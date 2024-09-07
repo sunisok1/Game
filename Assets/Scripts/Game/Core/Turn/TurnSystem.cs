@@ -44,7 +44,7 @@ namespace Game.Core.Turn
             {
                 Debug.Log("TurnNum++");
             }
-
+            p.InitPhase();
             OnPlayerPhaseEnter?.Invoke(p);
 
             await Task.Delay(1000, cancellationToken);

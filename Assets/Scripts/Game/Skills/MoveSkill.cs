@@ -6,7 +6,13 @@ namespace Game.Skills
 {
     public class MoveSkill : SkillBase
     {
+        public MoveSkill()
+        {
+            Usable = 1;
+        }
+
         public override string Name => "移动";
+
 
         protected override async Task ExecuteAsync(SkillArgs args)
         {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Framework;
 using Game.Abstract;
 using UnityEngine;
 
@@ -18,6 +20,8 @@ namespace Game.Core.Units
         }
 
         public int Id { get; }
+        public string name;
+        public string[] names;
 
         public Vector2Int Position { get; private set; }
 
@@ -36,7 +40,9 @@ namespace Game.Core.Units
         // public string[] awakenedSkills;
         // public Dictionary<string, string[]> forbiddenSkills;
         private readonly Dictionary<Type, ISkill> skills = new();
+        private readonly Dictionary<Type, int> skillChance = new();
         public IEnumerable<ISkill> Skills => skills.Values;
+        public IEnumerable<ISkill> CanUseSkills => skills.Values.Where(skill => skillChance[skill.GetType()] > 0);
         public IController Controller { get; set; }
 
         //本回合所有阶段列表
@@ -45,8 +51,32 @@ namespace Game.Core.Units
         //本回合当前阶段指针
         private int phasePointer;
 
-        public event Action<Vector2Int> OnMove;
+        #region SkillEvents
 
+        public event Action<Vector2Int> OnMove;
+        // public event Action GameDrawAfter;// 所有人摸牌结束之后，游戏开始
+        // public event Action PhaseBofore;// 回合开始前
+        // public event Action PhaseBegin;// 回合开始阶段
+        // public event Action PhaseJudgeBegin;//判定阶段开始时
+        // public event Action PhaseJudgeBefore;//判定阶段开始前
+        // public event Action PhaseJudge;// 判定阶段
+        // public event Action PhaseDrawBefore;//摸牌之前
+        // public event Action PhaseDrawBegin;//摸牌之时
+        // public event Action PhaseDrawEnd;//摸牌结束
+        // public event Action PhaseUseBefore;//出牌阶段之前
+        // public event Action PhaseUseBegin;//出牌阶段开始时
+        // public event Action PhaseUseEnd;//出牌阶段结束时
+        // public event Action PhaseDiscardBefore;//弃牌阶段之前
+        // public event Action PhaseDiscardBegin;//弃牌阶段开始时
+        // public event Action PhaseDiscardEnd;//弃牌阶段结束时
+        // public event Action PhaseEnd;//回合结束时
+        // public event Action LoseEnd;//失去一张牌时
+        // public event Action GainEnd;//获得一张牌后
+        // public event Action ChooseToRespondBegin;//打出一张牌响应之前
+        // public event Action ChooseToUseBegin;//使用一张牌后
+        // public event Action DamageEnd;
+
+        #endregion
         public void MoveTo(Vector2Int pos)
         {
             Position = pos;
@@ -92,29 +122,7 @@ namespace Game.Core.Units
 
         public Dictionary<string, object> marks;
 
-        public Dictionary<string, int>
-            expandedSlots;
-
         public Dictionary<string, int> disabledSlots;
-
-        /**
-         * @type { {
-         * 	friend: [],
-         * 	: [],
-         * 	neutral: [],
-         * 	shown?: number,
-         * 	handcards?: {
-         * 		global: [],
-         * 		source: [],
-         * 		viewed: []
-         * 	}
-         * } }
-         */
-        public object ai;
-
-        public int queueCount;
-
-        public int outCount;
 
         public int maxHp;
 
@@ -130,19 +138,14 @@ namespace Game.Core.Units
 
         public Player Previous { get; set; }
 
-        public string name;
-        public string[] names;
-        public string group;
-
-        public Action<Player> inits;
-
-        public bool isZhu;
-
-        public string identity;
-
-        public bool identityShown;
-
-        public bool removed;
+        public void InitPhase()
+        {
+            skillChance.Clear();
+            foreach (var skill in Skills)
+            {
+                skillChance.Add(skill.GetType(), skill.Usable);
+            }
+        }
 
         public async Task PhaseAsync()
         {
@@ -619,9 +622,12 @@ namespace Game.Core.Units
         // }
         public async void TriggerSkill(ISkill skill)
         {
-            if (skills.ContainsKey(skill.GetType()))
+            Type skillType = skill.GetType();
+            if (skills.ContainsKey(skillType))
             {
                 await skill.ExecuteAsync(new SkillArgs(this));
+                skillChance[skillType]--;
+                EventManager.InvokeEvent<SkillUsedEventArgs>(this, null);
             }
         }
     }

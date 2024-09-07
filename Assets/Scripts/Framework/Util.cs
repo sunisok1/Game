@@ -17,5 +17,14 @@ namespace Framework
             var rectTransform = transform as RectTransform;
             rectTransform.SetLocalPositionAndRotation(localPos, quaternion);
         }
+
+        public static void DestoryAllChildren(this Transform transform)
+        {
+
+            foreach (Transform item in transform)
+            {
+                Object.Destroy(item.gameObject);
+            }
+        }
     }
 }
