@@ -28,6 +28,8 @@ namespace Game.Core.Units
 
     public class Player
     {
+        private const int phaseInterval = 100;
+
         public Player(Vector2Int position, AbstractCharactor charactor)
         {
             Position = position;
@@ -203,11 +205,13 @@ namespace Game.Core.Units
         private async Task PhaseZhunbeiAsync()
         {
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Zhunbei));
+            await Task.Delay(phaseInterval);
         }
 
         private async Task PhaseJudgeAsync()
         {
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Judge));
+            await Task.Delay(phaseInterval);
         }
 
         private async Task PhaseDrawAsync()
@@ -215,6 +219,7 @@ namespace Game.Core.Units
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Draw));
             var cards = CardPile.Instance.GetFromTop(2);
             handCards.AddRange(cards);
+            await Task.Delay(phaseInterval);
         }
 
         private TaskCompletionSource<bool> phaseUseTask;
@@ -236,11 +241,13 @@ namespace Game.Core.Units
         private async Task PhaseDiscardAsync()
         {
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Discard));
+            await Task.Delay(phaseInterval);
         }
 
         private async Task PhaseJieshuAsync()
         {
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Jieshu));
+            await Task.Delay(phaseInterval);
         }
 
         //
