@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Framework;
 using Game.Abstract;
+using Game.Core.Cards;
 using UnityEngine;
 
 namespace Game.Core.Units
@@ -101,10 +102,8 @@ namespace Game.Core.Units
 
         Dictionary<string, object> node;
 
-        public string[] skipList;
-
-
-        public Card[] judging;
+        public List<AbstractCard> judging;
+        public List<AbstractCard> handCards = new();
 
         /**
          * @type { { card:{}, skill: {} }[] }
@@ -129,14 +128,6 @@ namespace Game.Core.Units
         public int hp;
 
         public int seatNum;
-
-        public Player NextSeat { get; set; }
-
-        public Player Next { get; set; }
-
-        public Player PreviousSeat { get; set; }
-
-        public Player Previous { get; set; }
 
         public void InitPhase()
         {
@@ -203,6 +194,8 @@ namespace Game.Core.Units
 
         private async Task PhaseDrawAsync()
         {
+            var cards = CardPile.Instance.GetFromTop(2);
+            handCards.AddRange(cards);
         }
 
         private TaskCompletionSource<bool> phaseUseTask;

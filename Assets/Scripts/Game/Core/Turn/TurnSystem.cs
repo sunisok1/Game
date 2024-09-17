@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Framework.Singletons;
@@ -15,6 +16,8 @@ namespace Game.Core.Turn
         public Player CurPlayer { get; private set; }
         public event Action<Player> OnPlayerPhaseEnter;
 
+        private readonly LinkedList<Player> playerQueue = new();
+
         public async void StartAsync(Status status)
         {
             var playerList = status.players;
@@ -22,14 +25,32 @@ namespace Game.Core.Turn
 
             try
             {
-                await PhaseLoop(PlayerManager.First, cancellationTokenSource.Token);
+                while (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    await TurnLoop(cancellationTokenSource.Token);
+                }
             }
-            catch (OperationCanceledException)
+            catch (Exception e)
             {
-                Debug.Log("PhaseLoop canceled.");
+                Debug.LogException(e);
             }
         }
 
+        private async Task TurnLoop(CancellationToken cancellationToken)
+        {
+            playerQueue.Clear();
+            foreach (var item in PlayerManager.PlayerList)
+            {
+                playerQueue.AddLast(item);
+            }
+
+            while (playerQueue.Count > 0)
+            {
+                var playerNode = playerQueue.First;
+                playerQueue.RemoveFirst();
+                await PhaseLoop(playerNode.Value, cancellationToken);
+            }
+        }
 
         private async Task PhaseLoop(Player p, CancellationToken cancellationToken)
         {
@@ -49,7 +70,6 @@ namespace Game.Core.Turn
 
             await Task.Delay(1000, cancellationToken);
             await p.PhaseAsync();
-            await PhaseLoop(p.Next, cancellationToken);
         }
 
         public override void Dispose()

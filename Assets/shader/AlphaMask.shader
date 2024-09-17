@@ -1,21 +1,11 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "ImageEffect/MinskinShader" 
+Shader "ImageEffect/AlphaMask" 
 {  
     Properties 
     {  
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Mask ("Base (RGB)", 2D) = "white" {}  
-       [IntRange] _Gray("Gray",Range(0,1)) = 1
-
-        _Color ("Color", Color) = (1,1,1,1)
-        _StencilComp ("Stencil Comparison", Float) = 8
-        _Stencil ("Stencil ID", Float) = 0
-        _StencilOp ("Stencil Operation", Float) = 0
-        _StencilWriteMask ("Stencil Write Mask", Float) = 255
-        _StencilReadMask ("Stencil Read Mask", Float) = 255
-        _ColorMask ("Color Mask", Float) = 15
-        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
     }
     
     SubShader 
@@ -23,27 +13,10 @@ Shader "ImageEffect/MinskinShader"
         Tags
         { 
             "Queue"="Transparent" 
-            "IgnoreProjector"="True" 
             "RenderType"="Transparent" 
-            "PreviewType"="Plane"
-            "CanUseSpriteAtlas"="True"
         }
         
-        Stencil
-        {
-            Ref [_Stencil]
-            Comp [_StencilComp]
-            Pass [_StencilOp] 
-            ReadMask [_StencilReadMask]
-            WriteMask [_StencilWriteMask]
-        }
-
-        Cull Off
-        Lighting Off
-        ZWrite Off
-        ZTest [unity_GUIZTestMode]
         Blend SrcAlpha OneMinusSrcAlpha
-        ColorMask [_ColorMask]
 
         Pass
         {         
@@ -63,9 +36,6 @@ Shader "ImageEffect/MinskinShader"
                 float4 color    : COLOR;
             };
 
-            fixed4 _Color;
-            float _Gray;
-
             struct v2f
             {
                 fixed2 uv : TEXCOORD0;
@@ -81,23 +51,14 @@ Shader "ImageEffect/MinskinShader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(i.vertex);
                 o.uv = i.uv;
-                o.color = i.color * _Color;
+                o.color = i.color;
                 return o;
-            }
-
-            half4 gray(half4 i)
-            {
-                float luminance  = 0.2125*i.r+0.7154*i.g+0.0721*i.b;
-                return half4(luminance,luminance,luminance,1);
             }
             
             fixed4 frag (v2f i) : COLOR
             {
                 half4 color = tex2D(_MainTex, i.uv) ; 
                 half4 mask = tex2D(_Mask, i.uv); 
-                float luminance  = 0.2125*color.r+0.7154*color.g+0.0721*color.b;
-                if(_Gray==1)
-                    color = gray(color);
                 color.a *= mask.a;
                 color *= i.color;
                 return color;
