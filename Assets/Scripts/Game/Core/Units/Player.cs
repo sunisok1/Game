@@ -9,6 +9,22 @@ using UnityEngine;
 
 namespace Game.Core.Units
 {
+    public class PlayerPhaseEnterArgs : EventArgs
+    {
+        public readonly PhaseEnum phase;
+        public PlayerPhaseEnterArgs(PhaseEnum phase)
+        {
+            this.phase = phase;
+        }
+    }
+    public class PlayerPhaseExitArgs : EventArgs
+    {
+        public readonly PhaseEnum phase;
+        public PlayerPhaseExitArgs(PhaseEnum phase)
+        {
+            this.phase = phase;
+        }
+    }
 
     public class Player
     {
@@ -186,14 +202,17 @@ namespace Game.Core.Units
 
         private async Task PhaseZhunbeiAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Zhunbei));
         }
 
         private async Task PhaseJudgeAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Judge));
         }
 
         private async Task PhaseDrawAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Draw));
             var cards = CardPile.Instance.GetFromTop(2);
             handCards.AddRange(cards);
         }
@@ -202,6 +221,7 @@ namespace Game.Core.Units
 
         private async Task PhaseUseAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Use));
             Debug.Log($"{name} is using skills. Waiting for player action...");
             phaseUseTask = new TaskCompletionSource<bool>();
             await phaseUseTask.Task;
@@ -215,10 +235,12 @@ namespace Game.Core.Units
 
         private async Task PhaseDiscardAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Discard));
         }
 
         private async Task PhaseJieshuAsync()
         {
+            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Jieshu));
         }
 
         //

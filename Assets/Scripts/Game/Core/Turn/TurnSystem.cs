@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Framework.Singletons;
+using Game.Abstract;
 using Game.Core.Units;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Game.Core.Turn
 {
+
     public sealed class TurnSystem : Singleton<TurnSystem>
     {
         private readonly CancellationTokenSource cancellationTokenSource = new();
-
         public Player CurPlayer { get; private set; }
-        public event Action<Player> OnPlayerPhaseEnter;
-
+        public event Action<Player> OnPlayerTuenEnter;
         private readonly LinkedList<Player> playerQueue = new();
 
         public async void StartAsync(Status status)
@@ -66,7 +66,7 @@ namespace Game.Core.Turn
                 Debug.Log("TurnNum++");
             }
             p.InitPhase();
-            OnPlayerPhaseEnter?.Invoke(p);
+            OnPlayerTuenEnter?.Invoke(p);
 
             await Task.Delay(1000, cancellationToken);
             await p.PhaseAsync();

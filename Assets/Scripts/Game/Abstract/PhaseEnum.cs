@@ -1,4 +1,4 @@
-﻿namespace Game.Core.Units
+﻿namespace Game.Abstract
 {
     public enum PhaseEnum
     {
