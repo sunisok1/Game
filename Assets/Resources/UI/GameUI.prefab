@@ -673,12 +673,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 14
     m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Top: 7
+    m_Bottom: 7
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 7
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -972,6 +972,7 @@ GameObject:
   - component: {fileID: 7861777500541720759}
   - component: {fileID: 7398819497205214942}
   - component: {fileID: 7504111187302744014}
+  - component: {fileID: 4574063976491424553}
   m_Layer: 5
   m_Name: HandCards
   m_TagString: Untagged
@@ -1067,3 +1068,17 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4574063976491424553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7505733832627223165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f94d85efbca7ec4582c0ea77f8f0e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 542865102840447631}
+  cardMonoPrefab: {fileID: 5434281331329272872, guid: a3012f9915e8fc34cb565ca7b21dc066, type: 3}

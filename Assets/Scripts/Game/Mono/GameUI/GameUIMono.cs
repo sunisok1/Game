@@ -9,12 +9,12 @@ namespace Game.Mono.GameUI
 
         private void Awake()
         {
-            TurnSystem.Instance.OnPlayerTuenEnter += skillButtonManager.SetContent;
+            TurnSystem.Instance.OnPlayerTurnEnter += skillButtonManager.SetContent;
         }
 
         private void OnDestroy()
         {
-            TurnSystem.Instance.OnPlayerTuenEnter -= skillButtonManager.SetContent;
+            TurnSystem.Instance.OnPlayerTurnEnter -= skillButtonManager.SetContent;
         }
     }
 }

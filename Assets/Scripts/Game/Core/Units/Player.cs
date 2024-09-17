@@ -9,24 +9,7 @@ using UnityEngine;
 
 namespace Game.Core.Units
 {
-    public class PlayerPhaseEnterArgs : EventArgs
-    {
-        public readonly PhaseEnum phase;
-        public PlayerPhaseEnterArgs(PhaseEnum phase)
-        {
-            this.phase = phase;
-        }
-    }
-    public class PlayerPhaseExitArgs : EventArgs
-    {
-        public readonly PhaseEnum phase;
-        public PlayerPhaseExitArgs(PhaseEnum phase)
-        {
-            this.phase = phase;
-        }
-    }
-
-    public class Player
+    public partial class Player
     {
         private const int phaseInterval = 100;
 
@@ -63,12 +46,8 @@ namespace Game.Core.Units
         public IEnumerable<ISkill> Skills => skills.Values;
         public IEnumerable<ISkill> CanUseSkills => skills.Values.Where(skill => skillChance[skill.GetType()] > 0);
         public IController Controller { get; set; }
-
-        //本回合所有阶段列表
-        private List<PhaseEnum> phaseQueue;
-
-        //本回合当前阶段指针
-        private int phasePointer;
+        public event Action<IEnumerable<AbstractCard>> OnGainHandCard;
+        public event Action<IEnumerable<AbstractCard>> OnLoseHandCard;
 
         #region SkillEvents
 
@@ -146,111 +125,6 @@ namespace Game.Core.Units
         public int hp;
 
         public int seatNum;
-
-        public void InitPhase()
-        {
-            skillChance.Clear();
-            foreach (var skill in Skills)
-            {
-                skillChance.Add(skill.GetType(), skill.Usable);
-            }
-        }
-
-        public async Task PhaseAsync()
-        {
-            Debug.Log($"{name} PhaseAsync Start...");
-            //初始化默认Phase队列
-            phaseQueue = new()
-            {
-                PhaseEnum.Zhunbei,
-                PhaseEnum.Judge,
-                PhaseEnum.Draw,
-                PhaseEnum.Use,
-                PhaseEnum.Discard,
-                PhaseEnum.Jieshu
-            };
-            phasePointer = 0;
-            while (phasePointer < phaseQueue.Count)
-            {
-                switch (phaseQueue[phasePointer])
-                {
-                    case PhaseEnum.None:
-                        throw new ArgumentOutOfRangeException(nameof(PhaseEnum) + " is None");
-                    case PhaseEnum.Zhunbei:
-                        await PhaseZhunbeiAsync();
-                        break;
-                    case PhaseEnum.Judge:
-                        await PhaseJudgeAsync();
-                        break;
-                    case PhaseEnum.Draw:
-                        await PhaseDrawAsync();
-                        break;
-                    case PhaseEnum.Use:
-                        await PhaseUseAsync();
-                        break;
-                    case PhaseEnum.Discard:
-                        await PhaseDiscardAsync();
-                        break;
-                    case PhaseEnum.Jieshu:
-                        await PhaseJieshuAsync();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                phasePointer++;
-            }
-        }
-
-        private async Task PhaseZhunbeiAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Zhunbei));
-            await Task.Delay(phaseInterval);
-        }
-
-        private async Task PhaseJudgeAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Judge));
-            await Task.Delay(phaseInterval);
-        }
-
-        private async Task PhaseDrawAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Draw));
-            var cards = CardPile.Instance.GetFromTop(2);
-            handCards.AddRange(cards);
-            await Task.Delay(phaseInterval);
-        }
-
-        private TaskCompletionSource<bool> phaseUseTask;
-
-        private async Task PhaseUseAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Use));
-            Debug.Log($"{name} is using skills. Waiting for player action...");
-            phaseUseTask = new TaskCompletionSource<bool>();
-            await phaseUseTask.Task;
-            Debug.Log($"{name} finished using skills.");
-        }
-
-        public void EndUse()
-        {
-            phaseUseTask.SetResult(true);
-        }
-
-        private async Task PhaseDiscardAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Discard));
-            await Task.Delay(phaseInterval);
-        }
-
-        private async Task PhaseJieshuAsync()
-        {
-            EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Jieshu));
-            await Task.Delay(phaseInterval);
-        }
-
-        //
         // chooseToUse(use)
         // {
         //     var next = game.createEvent("chooseToUse");
@@ -642,6 +516,15 @@ namespace Game.Core.Units
         //
         //     return next;
         // }
+
+        private void Draw(int num = 1)
+        {
+            var cards = CardPile.Instance.GetFromTop(num);
+
+            OnGainHandCard?.Invoke(cards);
+            handCards.AddRange(cards);
+        }
+
         public async void TriggerSkill(ISkill skill)
         {
             Type skillType = skill.GetType();

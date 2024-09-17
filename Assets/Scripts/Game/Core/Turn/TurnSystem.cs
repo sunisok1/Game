@@ -15,7 +15,8 @@ namespace Game.Core.Turn
     {
         private readonly CancellationTokenSource cancellationTokenSource = new();
         public Player CurPlayer { get; private set; }
-        public event Action<Player> OnPlayerTuenEnter;
+        public event Action<Player> OnPlayerTurnEnter;
+        public event Action<Player> OnPlayerTurnExit;
         private readonly LinkedList<Player> playerQueue = new();
 
         public async void StartAsync(Status status)
@@ -66,10 +67,13 @@ namespace Game.Core.Turn
                 Debug.Log("TurnNum++");
             }
             p.InitPhase();
-            OnPlayerTuenEnter?.Invoke(p);
 
-            await Task.Delay(1000, cancellationToken);
+            OnPlayerTurnEnter?.Invoke(p);
+
+            await Task.Delay(500, cancellationToken);
             await p.PhaseAsync();
+
+            OnPlayerTurnExit?.Invoke(p);
         }
 
         public override void Dispose()

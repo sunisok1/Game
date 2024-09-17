@@ -12,12 +12,12 @@ namespace Game.Mono.GameUI
         [SerializeField] private Image avatarImage;
         private void Start()
         {
-            TurnSystem.Instance.OnPlayerTuenEnter += UpdateAvatar;
+            TurnSystem.Instance.OnPlayerTurnEnter += UpdateAvatar;
         }
 
         private void OnDestroy()
         {
-            TurnSystem.Instance.OnPlayerTuenEnter -= UpdateAvatar;
+            TurnSystem.Instance.OnPlayerTurnEnter -= UpdateAvatar;
         }
 
         private void UpdateAvatar(Player player)
