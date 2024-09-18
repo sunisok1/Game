@@ -370,6 +370,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 542865102840447631, guid: 4d4675d2ea02af74ba1a1d192f3abc71, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.0002670288
+      objectReference: {fileID: 0}
     - target: {fileID: 3825554621442314456, guid: 4d4675d2ea02af74ba1a1d192f3abc71, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -499,7 +503,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 385469232}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1

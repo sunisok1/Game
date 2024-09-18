@@ -14,4 +14,20 @@ namespace Game.Abstract
         Jin,
         Shen
     }
+
+    public enum Suit
+    {
+        None,
+        Spade,
+        Heart,
+        Club,
+        Diamond
+    }
+
+    public enum CardColor
+    {
+        None,
+        Black,
+        Red
+    }
 }

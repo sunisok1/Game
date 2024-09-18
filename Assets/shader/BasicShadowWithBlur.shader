@@ -4,6 +4,8 @@ Shader "Custom/BasicShadowWithBlur"
     {
         _ShadowColor ("Shadow Color", Color) = (0, 0, 0, 0.5) // 阴影颜色
         _Radius ("Blur Radius", Range(0, 1)) = 0.5            // 模糊半径
+            _Stencil("_Stencil",int ) =1
+        _Stencil("_StencilOp",int ) =0
     }
     SubShader
     {

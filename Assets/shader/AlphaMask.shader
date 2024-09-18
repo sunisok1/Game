@@ -6,6 +6,8 @@ Shader "ImageEffect/AlphaMask"
     {  
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Mask ("Base (RGB)", 2D) = "white" {}  
+        _Stencil("_Stencil",int ) =1
+        _Stencil("_StencilOp",int ) =1
     }
     
     SubShader 
