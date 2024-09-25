@@ -5,6 +5,9 @@ using Gmae.lib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+
+
 namespace Game.Mono.GameUI
 {
     public class CardMono : MonoBehaviour
@@ -16,7 +19,7 @@ namespace Game.Mono.GameUI
         [SerializeField] private Graphic[] buttonImages;
         [SerializeField] private Button button;
         [SerializeField] private RectTransform bodyTransform;
-        private const int translateY = -20;
+        private const int translateY = 20;
         private bool selected;
         public bool Selected
         {
@@ -24,6 +27,7 @@ namespace Game.Mono.GameUI
             set
             {
                 selected = value;
+                bodyTransform.DOLocalMoveY(value ? translateY : 0, 0.5f);
             }
         }
 
