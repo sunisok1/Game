@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using Game.Abstract;
+using Game.Core.Cards;
+using Game.Core.Units;
 
 namespace Game.Cards
 {
     public static class Standard
     {
-        public static List<AbstractCard> cards = new()
+        public static List<Card> cards = new()
         {
             new Sha(Suit.Spade,7),
             new Sha(Suit.Spade,8),
@@ -40,10 +42,22 @@ namespace Game.Cards
         };
     }
 
-    public class Sha : AbstractCard
+    public class Sha : Card
     {
         public Sha(Suit suit, int point) : base("sha", suit, point)
         {
         }
+
+        public override bool Range(Card card, Player player, Player target)
+        {
+            return player.InRange(target);
+        }
+
+        public override bool FilterTarget(Card card, Player player, Player target)
+        {
+            return player != target;
+        }
+
+        public override CardType Type => CardType.Basic;
     }
 }

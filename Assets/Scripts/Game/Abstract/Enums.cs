@@ -30,4 +30,11 @@ namespace Game.Abstract
         Black,
         Red
     }
+
+    public enum CardType
+    {
+        Basic,
+        Equip,
+        Trick
+    }
 }

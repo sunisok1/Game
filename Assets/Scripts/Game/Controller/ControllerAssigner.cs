@@ -20,11 +20,12 @@ namespace Game.Controller
         {
             if (player.IsEnemy)
             {
-                player.Controller = new AiController();
+                throw new NotImplementedException();
+                // player.Controller = new AiController();
             }
             else
             {
-                player.Controller = new PlayerController();
+                player.Controller = new PlayerController(player);
             }
         }
     }

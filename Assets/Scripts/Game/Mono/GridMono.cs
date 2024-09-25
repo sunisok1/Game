@@ -27,7 +27,7 @@ namespace Game.Mono
         }
         private void OnClick()
         {
-            Chess.Instance.ClickGrid(pos);
+            ChessMono.Instance.ClickGrid(pos);
         }
 
         public void SetStatus(GridStatus status)

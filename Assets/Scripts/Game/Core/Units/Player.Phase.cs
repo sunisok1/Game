@@ -15,7 +15,6 @@ namespace Game.Core.Units
 
         //本回合当前阶段指针
         private int phasePointer;
-        private TaskCompletionSource<bool> phaseUseTask;
         public void InitPhase()
         {
             skillChance.Clear();
@@ -23,6 +22,11 @@ namespace Game.Core.Units
             {
                 skillChance.Add(skill.GetType(), skill.Usable);
             }
+
+            TurnCardUseCount.Clear();
+            TurnCardUseLimit.Clear();
+            TurnCardUseLimit["sha"] = 1;
+            TurnCardUseLimit["jiu"] = 1;
         }
 
         public async Task PhaseAsync()
@@ -94,15 +98,11 @@ namespace Game.Core.Units
         {
             EventManager.InvokeEvent<PlayerPhaseEnterArgs>(this, new(PhaseEnum.Use));
             Debug.Log($"{name} is using skills. Waiting for player action...");
-            phaseUseTask = new TaskCompletionSource<bool>();
-            await phaseUseTask.Task;
+            await Controller.PhaseUse();
             Debug.Log($"{name} finished using skills.");
         }
 
-        public void EndUse()
-        {
-            phaseUseTask.SetResult(true);
-        }
+
 
         private async Task PhaseDiscardAsync()
         {

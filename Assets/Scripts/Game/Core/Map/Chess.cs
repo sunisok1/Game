@@ -44,10 +44,6 @@ namespace Game.Core.Map
         public const int height = 5;
         private readonly Grid[,] grids = new Grid[width, height];
 
-        public event Action<GridStateChangeArgs> OnGridStateChange;
-
-        public event Action<Vector2Int> OnGridClicked;
-
         public Chess()
         {
             for (var i = 0; i < width; i++)
@@ -82,20 +78,6 @@ namespace Game.Core.Map
 
             return list;
         }
-
-        public void SetStatus(GridStatus status, IEnumerable<Vector2Int> positions)
-        {
-            foreach (var position in positions)
-            {
-                OnGridStateChange?.Invoke(new GridStateChangeArgs(position, status));
-            }
-        }
-
-        public void ClickGrid(Vector2Int position)
-        {
-            OnGridClicked?.Invoke(position);
-        }
-
 
         public bool IsWithinGridBounds(int x, int y)
         {

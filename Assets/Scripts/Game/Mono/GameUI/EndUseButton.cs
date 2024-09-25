@@ -39,7 +39,7 @@ namespace Game.Mono.GameUI
 
         protected override void OnClick()
         {
-            player.EndUse();
+            player.Controller.EndUse();
         }
     }
 }

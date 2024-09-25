@@ -16,7 +16,7 @@ namespace Game.Mono
         private const int width = Chess.width;
         private const int height = Chess.height;
         private readonly GridMono[,] grids = new GridMono[width, height];
-
+        public event Action<Vector2Int> OnGridClicked;
         [SerializeField] private PlayerMono playerPrefab;
         [SerializeField] private GridMono gridPrefab;
         [SerializeField] private Transform playerContent;
@@ -35,13 +35,11 @@ namespace Game.Mono
             }
 
             PlayerManager.OnPlayerCreate += OnPlayerCreate;
-            Chess.Instance.OnGridStateChange += OnGridStateChange;
         }
 
         private void OnDestroy()
         {
             PlayerManager.OnPlayerCreate -= OnPlayerCreate;
-            Chess.Instance.OnGridStateChange -= OnGridStateChange;
         }
 
         private static Vector3 GetGridPos(int i, int j)
@@ -54,12 +52,15 @@ namespace Game.Mono
             Util.MoveRectLocal(transform, GetGridPos(pos.x, pos.y), Quaternion.identity, playerContent);
         }
 
-
-        private void OnGridStateChange(GridStateChangeArgs args)
+        public void SetStatus(Vector2Int position, GridStatus status)
         {
-            grids[args.Position.x, args.Position.y].SetStatus(args.Status);
+            grids[position.x, position.y].SetStatus(status);
         }
 
+        public void ClickGrid(Vector2Int position)
+        {
+            OnGridClicked?.Invoke(position);
+        }
 
         private void OnPlayerCreate(Player player)
         {

@@ -7,9 +7,9 @@ namespace Game.Core.Cards
 {
     public class CardPile : Singleton<CardPile>
     {
-        private readonly LinkedList<AbstractCard> cards = new();
+        private readonly LinkedList<Card> cards = new();
 
-        public void Init(params IEnumerable<AbstractCard>[] cardLists)
+        public void Init(params IEnumerable<Card>[] cardLists)
         {
             foreach (var cardList in cardLists)
             {
@@ -20,16 +20,16 @@ namespace Game.Core.Cards
             }
         }
 
-        public AbstractCard GetFromTop()
+        public Card GetFromTop()
         {
             var card = cards.First.Value;
             cards.RemoveFirst();
             return card;
         }
 
-        public List<AbstractCard> GetFromTop(int count)
+        public List<Card> GetFromTop(int count)
         {
-            var result = new List<AbstractCard>();
+            var result = new List<Card>();
             for (int i = 0; i < count && cards.Count > 0; i++)
             {
                 result.Add(cards.First.Value);
@@ -38,16 +38,16 @@ namespace Game.Core.Cards
             return result;
         }
 
-        public AbstractCard GetFromBottom()
+        public Card GetFromBottom()
         {
             var card = cards.Last.Value;
             cards.RemoveLast();
             return card;
         }
 
-        public List<AbstractCard> GetFromBottom(int count)
+        public List<Card> GetFromBottom(int count)
         {
-            var result = new List<AbstractCard>();
+            var result = new List<Card>();
             for (int i = 0; i < count && cards.Count > 0; i++)
             {
                 result.Add(cards.Last.Value);
