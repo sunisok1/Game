@@ -27,6 +27,7 @@ namespace Game.Core.Units
             TurnCardUseLimit.Clear();
             TurnCardUseLimit["sha"] = 1;
             TurnCardUseLimit["jiu"] = 1;
+            TurnCardUseLimit["shan"] = 0;
         }
 
         public async Task PhaseAsync()

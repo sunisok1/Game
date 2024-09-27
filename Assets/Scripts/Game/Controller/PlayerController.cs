@@ -22,13 +22,13 @@ namespace Game.Controller
         }
         public async Task ChooseToUse(EventArgs args)
         {
-            if (args is not UseCardArgs useCardArgs) return;
-            var player = useCardArgs.player;
-            var tcs = new TaskCompletionSource<bool>();
-            foreach (var card in player.handCards)
-            {
-                HandCardContainer.SetCardUseable(card, useCardArgs.filterCard(card, player, EventArgs.Empty));
-            }
+            // if (args is not UseCardArgs useCardArgs) return;
+            // var player = useCardArgs.player;
+            // var tcs = new TaskCompletionSource<bool>();
+            // foreach (var card in player.handCards)
+            // {
+            //     HandCardContainer.SetCardUseable(card, useCardArgs.filterCard(card, player, EventArgs.Empty));
+            // }
         }
 
         public async Task<Vector2Int> SelectPosition(List<Vector2Int> posList)

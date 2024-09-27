@@ -15,8 +15,9 @@ namespace Game.Mono.GameUI
         [SerializeField] private CardMono cardMonoPrefab;
 
         private readonly Dictionary<Card, CardMono> monoMapping = new();
-
-        private Player player;
+        private readonly List<Card> selectedCards = new();
+        private int selectLimit = 1;
+        private Func<Card, bool> cardFilter;
         private void Start()
         {
             TurnSystem.Instance.OnPlayerTurnEnter += OnPlayerTurnEnter;
@@ -29,17 +30,9 @@ namespace Game.Mono.GameUI
             TurnSystem.Instance.OnPlayerTurnExit -= OnPlayerTurnExit;
         }
 
-        public void SetCardUseable(Card card, bool useable)
-        {
-            if (monoMapping.TryGetValue(card, out var cardMone))
-            {
-                cardMone.SetUseable(useable);
-            }
-        }
-
         private void OnPlayerTurnEnter(Player player)
         {
-            this.player = player;
+            cardFilter = player.GetCardUseable;
             monoMapping.Clear();
             content.DestoryAllChildren();
             CreateHandCard(player.handCards);
@@ -60,8 +53,39 @@ namespace Game.Mono.GameUI
             {
                 var cardMono = Instantiate(cardMonoPrefab, content);
                 cardMono.Init(card);
-                cardMono.SetUseable(player.GetCardUseable(card));
+                cardMono.CardStatus = cardFilter(card) ? CardStatus.Selectable : CardStatus.Unselectable;
+                cardMono.OnCardSelected += OnCardSelected;
                 monoMapping.Add(card, cardMono);
+            }
+        }
+
+        private void OnCardSelected(Card selectingCard, bool selected)
+        {
+            if (selected)
+            {
+                selectedCards.Add(selectingCard);
+                if (selectedCards.Count == selectLimit)
+                {
+                    foreach ((var card, var cardMono) in monoMapping)
+                    {
+                        if (selectedCards.Contains(card))
+                            continue;
+                        cardMono.CardStatus = CardStatus.Unselectable;
+                    }
+                }
+            }
+            else
+            {
+                selectedCards.Remove(selectingCard);
+                if (selectedCards.Count == selectLimit - 1)
+                {
+                    foreach ((var card, var cardMono) in monoMapping)
+                    {
+                        if (selectedCards.Contains(card))
+                            continue;
+                        cardMono.CardStatus = cardFilter(card) ? CardStatus.Selectable : CardStatus.Unselectable;
+                    }
+                }
             }
         }
 

@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Framework.Singletons;
 using Game.Abstract;
+using UnityEngine;
 
 namespace Game.Core.Cards
 {
     public class CardPile : Singleton<CardPile>
     {
-        private readonly LinkedList<Card> cards = new();
+        private readonly List<Card> cards = new();
 
         public void Init(params IEnumerable<Card>[] cardLists)
         {
@@ -15,15 +16,25 @@ namespace Game.Core.Cards
             {
                 foreach (var card in cardList)
                 {
-                    cards.AddLast(card);
+                    cards.Add(card);
+                    Sheffle();
                 }
+            }
+        }
+
+        private void Sheffle()
+        {
+            for (int i = 0; i < cards.Count; i++)
+            {
+                var random = Random.Range(0, cards.Count);
+                (cards[i], cards[random]) = (cards[random], cards[i]);
             }
         }
 
         public Card GetFromTop()
         {
-            var card = cards.First.Value;
-            cards.RemoveFirst();
+            var card = cards[0];
+            cards.RemoveAt(0);
             return card;
         }
 
@@ -32,16 +43,16 @@ namespace Game.Core.Cards
             var result = new List<Card>();
             for (int i = 0; i < count && cards.Count > 0; i++)
             {
-                result.Add(cards.First.Value);
-                cards.RemoveFirst();
+                result.Add(cards[0]);
+                cards.RemoveAt(0);
             }
             return result;
         }
 
         public Card GetFromBottom()
         {
-            var card = cards.Last.Value;
-            cards.RemoveLast();
+            var card = cards[^1];
+            cards.RemoveAt(cards.Count - 1);
             return card;
         }
 
@@ -50,8 +61,8 @@ namespace Game.Core.Cards
             var result = new List<Card>();
             for (int i = 0; i < count && cards.Count > 0; i++)
             {
-                result.Add(cards.Last.Value);
-                cards.RemoveLast();
+                result.Add(cards[^1]);
+                cards.RemoveAt(cards.Count - 1);
             }
             return result;
         }
