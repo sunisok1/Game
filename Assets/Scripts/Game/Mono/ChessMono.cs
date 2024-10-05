@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using Framework;
 using Framework.Singletons;
 using Game.Core;
@@ -21,6 +22,10 @@ namespace Game.Mono
         [SerializeField] private GridMono gridPrefab;
         [SerializeField] private Transform playerContent;
         [SerializeField] private Transform gridContent;
+
+        private readonly Dictionary<Player, PlayerMono> MonoMapping = new();
+
+        public IReadOnlyDictionary<Player, PlayerMono> PlayerMonoDict => MonoMapping;
 
         private void Start()
         {
@@ -65,7 +70,32 @@ namespace Game.Mono
         private void OnPlayerCreate(Player player)
         {
             var playerMono = Util.InstantiateRectLocal(playerPrefab, GetGridPos(player.Position.x, player.Position.y), Quaternion.identity, playerContent);
+            MonoMapping.Add(player, playerMono);
             playerMono.Init(player);
+        }
+        public void SetPlayerSelectable(Player player, bool selectable) => MonoMapping[player].Selectable = selectable;
+        public void SelectPlayer(Player player) => MonoMapping[player].Selected = true;
+        public void UnselectPlayer(Player player) => MonoMapping[player].Selected = false;
+        public void ForceSelectPlayer(Player player) => MonoMapping[player].ForceSelect();
+
+        public void FilterSelectablePlayers(Func<Player, bool> filter)
+        {
+            foreach ((var player, var playerMono) in MonoMapping)
+            {
+                if (filter(player))
+                {
+                    playerMono.Selectable = true;
+                }
+
+            }
+        }
+        public void ClearSelectedPlayers()
+        {
+            foreach ((_, var playerMono) in MonoMapping)
+            {
+                playerMono.Selectable = false;
+                playerMono.Selected = false;
+            }
         }
     }
 }

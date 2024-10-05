@@ -16,9 +16,9 @@ namespace Game.BeforeBattle
             CardPile.Instance.Init(Cards.Standard.cards);
             var players = new List<Player>()
             {
-                new(new(1, 4),new Liubei()),
+                new(new(1, 3),new Liubei()),
                 new(new(1, 2),new Guanyu()),
-                new(new(2, 1),new Zhangfei()),
+                new(new(1, 1),new Zhangfei()),
             };
             foreach (var player in players)
             {

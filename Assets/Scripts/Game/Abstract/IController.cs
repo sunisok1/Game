@@ -10,7 +10,6 @@ namespace Game.Abstract
         Task<Vector2Int> SelectPosition(List<Vector2Int> posList);
         Task ChooseToUse(EventArgs eventArgs);
         Task PhaseUse();
-
         void EndUse();
     }
 }

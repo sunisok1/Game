@@ -48,12 +48,12 @@ namespace Game.Cards
         {
         }
 
-        public override bool Range(Card card, Player player, Player target)
+        public override bool Range(Player player, Player target)
         {
             return player.InRange(target);
         }
 
-        public override bool FilterTarget(Card card, Player player, Player target)
+        public override bool FilterTarget(Player player, Player target)
         {
             return player != target;
         }

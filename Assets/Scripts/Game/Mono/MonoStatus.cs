@@ -1,4 +1,4 @@
-namespace Game.Mono.GameUI
+namespace Game.Mono
 {
     public enum CardStatus
     {
